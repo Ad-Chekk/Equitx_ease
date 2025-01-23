@@ -24,7 +24,7 @@ alert('welcome Admin, your authorization was successful');
 #st.write("hello mr")
 abab = 33
 
-st.title(' :violet[StocxEdge] : optimize your investments')
+st.title(' :violet[StocxEdge] : optimize your investments and test them')
 username=st.text_input('Username')
 password=st.text_input('[Password]', type='password')
 submit = st.button('Submit')
