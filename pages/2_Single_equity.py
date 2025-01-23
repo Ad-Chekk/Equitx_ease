@@ -100,30 +100,30 @@ if stock_input and start_date and selected_option:
 
 
 
-#  with col3:                                                                                           #donut wala
-#   # Calculate normalized price change and volume
-#   price_change = (complete_data['Close'] - complete_data['Open']).mean()
-#   normalized_volume = (complete_data['Volume'] - complete_data['Volume'].min()) / (
-#            complete_data['Volume'].max() - complete_data['Volume'].min())
+ with col3:                                                                                           #donut wala
+  # Calculate normalized price change and volume
+  price_change = (complete_data['Close'] - complete_data['Open']).mean()
+  normalized_volume = (complete_data['Volume'] - complete_data['Volume'].min()) / (
+           complete_data['Volume'].max() - complete_data['Volume'].min())
 
-#   # Create the Donut Chart
-#   donut_data = pd.DataFrame({
-#    'Attribute': ['Price Change', 'Volume'],
-#    'Value': [price_change, normalized_volume.mean()]
-#   })
+  # Create the Donut Chart
+  donut_data = pd.DataFrame({
+   'Attribute': ['Price Change', 'Volume'],
+   'Value': [price_change, normalized_volume.mean()]
+  })
 
 #                                                                                                     # Create the Donut Chart
-#   fig = px.pie(donut_data, names='Attribute', values='Value', hole=0.5)
-#   fig.update_layout(
-#    paper_bgcolor='rgba(0, 0, 0, 0)',  # Transparent background
-#    plot_bgcolor='rgba(0, 0, 0, 0)',  # Transparent plot area
-#   )
-#   fig.update_traces(textposition='inside', textinfo='percent+label')
-#   fig.update_layout(
-#    title='Price Change vs. Volume (Mean)',
-#    showlegend=False, height=350, width=300
-#   )
-#   st.plotly_chart(fig, use_container_width=True)
+  fig = px.pie(donut_data, names='Attribute', values='Value', hole=0.5)
+  fig.update_layout(
+   paper_bgcolor='rgba(0, 0, 0, 0)',  # Transparent background
+   plot_bgcolor='rgba(0, 0, 0, 0)',  # Transparent plot area
+  )
+  fig.update_traces(textposition='inside', textinfo='percent+label')
+  fig.update_layout(
+   title='Price Change vs. Volume (Mean)',
+   showlegend=False, height=350, width=300
+  )
+  st.plotly_chart(fig, use_container_width=True)
 
 #   # Display the Donut Chart in Streamlit
 
