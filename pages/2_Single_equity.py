@@ -77,111 +77,117 @@ end_date=st.sidebar.date_input(':watch: End Date:')
 if stock_input and start_date and selected_option:
  st.write(stock_input)
  full_data= full_exceptVolume(stock_input,start_date,end_date)
+ 
+ full_data_flat = full_data.copy()
+ if isinstance(full_data.columns, pd.MultiIndex):
+    full_data_flat.columns = ['_'.join(col).strip() for col in full_data.columns.values]
+
+ 
  complete_data = complete_stock_data(stock_input,start_date,end_date)
  volume_data = complete_data['Volume']
  Database_view=st.button('View the complete database')
  if Database_view:
   st.write(complete_data)                                                     # datbase view ahe
 
- with col1:
-  line = px.line(full_data, title='Single stock visualizer')                 #line wala
-  # line.update_layout(
-  # paper_bgcolor='rgba(0, 0, 0, 0)',  # Transparent background
-  # plot_bgcolor='rgba(0, 0, 0, 0)',  # Transparent plot area
-  # )
-  line.update_layout( height=350, width=width1)
-  st.plotly_chart(line)
+#  with col1:
+#   line = px.line(full_data_flat, title='Single stock visualizer')                 #line wala
+#   # line.update_layout(
+#   # paper_bgcolor='rgba(0, 0, 0, 0)',  # Transparent background
+#   # plot_bgcolor='rgba(0, 0, 0, 0)',  # Transparent plot area
+#   # )
+#   line.update_layout( height=350, width=width1)
+#   st.plotly_chart(line)
 
 
 
- with col3:                                                                                           #donut wala
-  # Calculate normalized price change and volume
-  price_change = (complete_data['Close'] - complete_data['Open']).mean()
-  normalized_volume = (complete_data['Volume'] - complete_data['Volume'].min()) / (
-           complete_data['Volume'].max() - complete_data['Volume'].min())
+#  with col3:                                                                                           #donut wala
+#   # Calculate normalized price change and volume
+#   price_change = (complete_data['Close'] - complete_data['Open']).mean()
+#   normalized_volume = (complete_data['Volume'] - complete_data['Volume'].min()) / (
+#            complete_data['Volume'].max() - complete_data['Volume'].min())
 
-  # Create the Donut Chart
-  donut_data = pd.DataFrame({
-   'Attribute': ['Price Change', 'Volume'],
-   'Value': [price_change, normalized_volume.mean()]
-  })
+#   # Create the Donut Chart
+#   donut_data = pd.DataFrame({
+#    'Attribute': ['Price Change', 'Volume'],
+#    'Value': [price_change, normalized_volume.mean()]
+#   })
 
-                                                                                                    # Create the Donut Chart
-  fig = px.pie(donut_data, names='Attribute', values='Value', hole=0.5)
-  fig.update_layout(
-   paper_bgcolor='rgba(0, 0, 0, 0)',  # Transparent background
-   plot_bgcolor='rgba(0, 0, 0, 0)',  # Transparent plot area
-  )
-  fig.update_traces(textposition='inside', textinfo='percent+label')
-  fig.update_layout(
-   title='Price Change vs. Volume (Mean)',
-   showlegend=False, height=350, width=300
-  )
-  st.plotly_chart(fig, use_container_width=True)
+#                                                                                                     # Create the Donut Chart
+#   fig = px.pie(donut_data, names='Attribute', values='Value', hole=0.5)
+#   fig.update_layout(
+#    paper_bgcolor='rgba(0, 0, 0, 0)',  # Transparent background
+#    plot_bgcolor='rgba(0, 0, 0, 0)',  # Transparent plot area
+#   )
+#   fig.update_traces(textposition='inside', textinfo='percent+label')
+#   fig.update_layout(
+#    title='Price Change vs. Volume (Mean)',
+#    showlegend=False, height=350, width=300
+#   )
+#   st.plotly_chart(fig, use_container_width=True)
 
-  # Display the Donut Chart in Streamlit
+#   # Display the Donut Chart in Streamlit
 
- with TL:                                                                  # gauge chart
-  avg_volume=complete_data['Volume'].mean()
-  fig = go.Figure(go.Indicator(
-   mode="gauge+number",
-   value=avg_volume,
-   title={'text': "Average Trading Volume"},
-   domain={'x': [0, 1], 'y': [0, 1]}
-  ))                                                                         # Display the gauge chart in Streamlit
-  fig.update_layout(
-  paper_bgcolor='rgba(0, 0, 0, 0)',  # Transparent background
-  plot_bgcolor='rgba(0, 0, 0, 0)',  # Transparent plot area
-  )
-  fig.update_layout(width=300, height=270)
-  st.plotly_chart(fig)
+#  with TL:                                                                  # gauge chart
+#   avg_volume=complete_data['Volume'].mean()
+#   fig = go.Figure(go.Indicator(
+#    mode="gauge+number",
+#    value=avg_volume,
+#    title={'text': "Average Trading Volume"},
+#    domain={'x': [0, 1], 'y': [0, 1]}
+#   ))                                                                         # Display the gauge chart in Streamlit
+#   fig.update_layout(
+#   paper_bgcolor='rgba(0, 0, 0, 0)',  # Transparent background
+#   plot_bgcolor='rgba(0, 0, 0, 0)',  # Transparent plot area
+#   )
+#   fig.update_layout(width=300, height=270)
+#   st.plotly_chart(fig)
 
- with M:
-  if not full_data.empty:
-    returns = full_data['Adj Close'].pct_change().dropna()
-  else:
-    st.warning("No data available for percentage change calculation")
-    returns = pd.Series()
-  #returns = full_data['Adj Close'].pct_change().dropna()
-  volatility = returns.std()
-  fig = go.Figure(go.Indicator(
-   mode="gauge+number",
-   value=volatility,
-   title={'text': "volatility"},
-   domain={'x': [0, 1], 'y': [0, 1]}
-  ))
-  fig.update_layout(
-  paper_bgcolor='rgba(0, 0, 0, 0)',  # Transparent background
-  plot_bgcolor='rgba(0, 0, 0, 0)',  # Transparent plot area
-  )
-  fig.update_layout(width=300, height=270)
-  # Display the gauge chart in Streamlit
-  st.plotly_chart(fig)
+#  with M:
+#   if not full_data.empty:
+#     returns = full_data['Adj Close'].pct_change().dropna()
+#   else:
+#     st.warning("No data available for percentage change calculation")
+#     returns = pd.Series()
+#   #returns = full_data['Adj Close'].pct_change().dropna()
+#   volatility = returns.std()
+#   fig = go.Figure(go.Indicator(
+#    mode="gauge+number",
+#    value=volatility,
+#    title={'text': "volatility"},
+#    domain={'x': [0, 1], 'y': [0, 1]}
+#   ))
+#   fig.update_layout(
+#   paper_bgcolor='rgba(0, 0, 0, 0)',  # Transparent background
+#   plot_bgcolor='rgba(0, 0, 0, 0)',  # Transparent plot area
+#   )
+#   fig.update_layout(width=300, height=270)
+#   # Display the gauge chart in Streamlit
+#   st.plotly_chart(fig)
 
- with TMR:                                #  indicator
-  fig = go.Figure()
-  maximum = full_data['High'].max()
-  minimum= full_data['Low'].min()
-  fig.add_trace(go.Indicator(
-   mode="number+delta",
-   value=maximum,
-   title={
-    "text": stock_input+ ":<br><span style='font-size:0.8em;color:gray'>MAX returns</span><br><span style='font-size:0.8em;color:gray'>High-Low</span>"},
-   delta={'reference': minimum, 'relative': True},
-   domain={'x': [0, 1], 'y': [0, 1]}))
-  fig.update_layout(height=270,width=300,
-  paper_bgcolor = 'rgba(0, 0, 0, 0)',  # Transparent background
-  plot_bgcolor = 'rgba(0, 0, 0, 0)',
-  )
-  st.write(fig, align='center')
+#  with TMR:                                #  indicator
+#   fig = go.Figure()
+#   maximum = full_data['High'].max()
+#   minimum= full_data['Low'].min()
+#   fig.add_trace(go.Indicator(
+#    mode="number+delta",
+#    value=maximum,
+#    title={
+#     "text": stock_input+ ":<br><span style='font-size:0.8em;color:gray'>MAX returns</span><br><span style='font-size:0.8em;color:gray'>High-Low</span>"},
+#    delta={'reference': minimum, 'relative': True},
+#    domain={'x': [0, 1], 'y': [0, 1]}))
+#   fig.update_layout(height=270,width=300,
+#   paper_bgcolor = 'rgba(0, 0, 0, 0)',  # Transparent background
+#   plot_bgcolor = 'rgba(0, 0, 0, 0)',
+#   )
+#   st.write(fig, align='center')
 
- with TR:
-  volume_data = complete_data['Volume']
-  line = px.line(volume_data, title='Stock volume Visualizer')  # line wala
-  line.update_layout(
-   paper_bgcolor='rgba(0, 0, 0, 0)',  # Transparent background
-   plot_bgcolor='rgba(0, 0, 0, 0)',  # Transparent plot area
-  )
-  line.update_layout(width=300, height=270)
-  st.plotly_chart(line)
+#  with TR:
+#   volume_data = complete_data['Volume']
+#   line = px.line(volume_data, title='Stock volume Visualizer')  # line wala
+#   line.update_layout(
+#    paper_bgcolor='rgba(0, 0, 0, 0)',  # Transparent background
+#    plot_bgcolor='rgba(0, 0, 0, 0)',  # Transparent plot area
+#   )
+#   line.update_layout(width=300, height=270)
+#   st.plotly_chart(line)
 
