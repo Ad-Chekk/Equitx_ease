@@ -89,14 +89,14 @@ if stock_input and start_date and selected_option:
  if Database_view:
   st.write(complete_data)                                                     # datbase view ahe
 
-#  with col1:
-#   line = px.line(full_data_flat, title='Single stock visualizer')                 #line wala
-#   # line.update_layout(
-#   # paper_bgcolor='rgba(0, 0, 0, 0)',  # Transparent background
-#   # plot_bgcolor='rgba(0, 0, 0, 0)',  # Transparent plot area
-#   # )
-#   line.update_layout( height=350, width=width1)
-#   st.plotly_chart(line)
+ with col1:
+  line = px.line(full_data_flat, title='Single stock visualizer')                 #line wala
+  # line.update_layout(
+  # paper_bgcolor='rgba(0, 0, 0, 0)',  # Transparent background
+  # plot_bgcolor='rgba(0, 0, 0, 0)',  # Transparent plot area
+  # )
+  line.update_layout( height=350, width=width1)
+  st.plotly_chart(line)
 
 
 
