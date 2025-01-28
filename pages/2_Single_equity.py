@@ -47,7 +47,7 @@ emojis= ''':alarm_clock:
 1745	⏳	:hourglass_flowing_sand:'''
 
 TL, M, TR, TMR = st.columns(4)
-col1, col2 , col3= st.columns(3)
+col1, col2 = st.columns([2, 1])
 
 
 dash_width=700
@@ -82,68 +82,84 @@ if stock_input and start_date and selected_option:
  if isinstance(full_data.columns, pd.MultiIndex):
     full_data_flat.columns = ['_'.join(col).strip() for col in full_data.columns.values]
 
- 
+
  complete_data = complete_stock_data(stock_input,start_date,end_date)
  volume_data = complete_data['Volume']
- Database_view=st.button('View the complete database')
- if Database_view:
-  st.write(complete_data)                                                     # datbase view ahe
+                                                    # datbase view ahe
+with col1:  # Line Chart
+    line = px.line(full_data_flat, title='Single stock visualizer')
+    line.update_layout(
+        height=350,
+        width=full_width,  # Use full width for line chart
+    )
+    st.plotly_chart(line)
 
- with col1:
-  line = px.line(full_data_flat, title='Single stock visualizer')                 #line wala
-  # line.update_layout(
-  # paper_bgcolor='rgba(0, 0, 0, 0)',  # Transparent background
-  # plot_bgcolor='rgba(0, 0, 0, 0)',  # Transparent plot area
-  # )
-  line.update_layout(height=350)
-  st.plotly_chart(line, use_container_width=True)
-  # line.update_layout( height=350, width=800)
-  # st.plotly_chart(line)
+ 
+      
 
-
-
- with col3:                                                                                           #donut wala
-  # Calculate normalized price change and volume
+with col2:  # Donut Chart
+    # Ensure we get scalar values
   price_change = (complete_data['Close'] - complete_data['Open']).mean()
   normalized_volume = (complete_data['Volume'] - complete_data['Volume'].min()) / (
-           complete_data['Volume'].max() - complete_data['Volume'].min())
+      complete_data['Volume'].max() - complete_data['Volume'].min())
 
-  # Create the Donut Chart
+  # Convert them into pure numbers (floats)
+  price_change_value = price_change.item()  # Convert to scalar value
+  normalized_volume_value = normalized_volume.mean().item()  # Convert to scalar value
+
+  # Display the values for debugging
+  # st.write(f"Price Change: {price_change_value}")
+  # st.write(f"Normalized Volume: {normalized_volume_value}")
+
+  # Create the donut data
   donut_data = pd.DataFrame({
-   'Attribute': ['Price Change', 'Volume'],
-   'Value': [price_change, normalized_volume.mean()]
+      'Attribute': ['Price Change', 'Volume'],
+      'Value': [price_change_value, normalized_volume_value]
   })
 
-#                                                                                                     # Create the Donut Chart
+ 
+  # Create and display the pie chart
   fig = px.pie(donut_data, names='Attribute', values='Value', hole=0.5)
   fig.update_layout(
-   paper_bgcolor='rgba(0, 0, 0, 0)',  # Transparent background
-   plot_bgcolor='rgba(0, 0, 0, 0)',  # Transparent plot area
+      title='Price Change vs. Volume (Mean)',
+      height=350,
+      width=full_width,
+      paper_bgcolor='rgba(0, 0, 0, 0)',  # Transparent background
+      plot_bgcolor='rgba(0, 0, 0, 0)'
   )
-  fig.update_traces(textposition='inside', textinfo='percent+label')
-  fig.update_layout(
-   title='Price Change vs. Volume (Mean)',
-   showlegend=False, height=350, width=300
-  )
-  st.plotly_chart(fig, use_container_width=True)
+  
+
+  st.plotly_chart(fig)
 
 #   # Display the Donut Chart in Streamlit
 
-#  with TL:                                                                  # gauge chart
-#   avg_volume=complete_data['Volume'].mean()
-#   fig = go.Figure(go.Indicator(
-#    mode="gauge+number",
-#    value=avg_volume,
-#    title={'text': "Average Trading Volume"},
-#    domain={'x': [0, 1], 'y': [0, 1]}
-#   ))                                                                         # Display the gauge chart in Streamlit
-#   fig.update_layout(
-#   paper_bgcolor='rgba(0, 0, 0, 0)',  # Transparent background
-#   plot_bgcolor='rgba(0, 0, 0, 0)',  # Transparent plot area
-#   )
-#   fig.update_layout(width=300, height=270)
-#   st.plotly_chart(fig)
+with TL: 
+  # Calculate the average trading volume as a single numeric value (float)
+  avg_volume = complete_data['Volume'].values.mean()
 
+#   # Debug: Print the value to check if it's a scalar
+#   st.write(f"Average Volume: {avg_volume}")
+
+  # # Create the gauge chart with the extracted avg_volume as a scalar value
+  fig = go.Figure(go.Indicator(
+      mode="gauge+number",
+      value=avg_volume,  # Ensure this is a scalar value (float)
+      title={'text': "Average Trading Volume"},
+      domain={'x': [0, 1], 'y': [0, 1]}
+  ))
+
+  # Update the layout of the gauge chart
+  fig.update_layout(
+      paper_bgcolor='rgba(0, 0, 0, 0)',  # Transparent background
+      plot_bgcolor='rgba(0, 0, 0, 0)',  # Transparent plot area
+      width=300,
+      height=270
+  )
+
+  # Display the gauge chart in Streamlit
+  st.plotly_chart(fig)
+                                                                  #gauge chart
+ 
 #  with M:
 #   if not full_data.empty:
 #     returns = full_data['Adj Close'].pct_change().dropna()
