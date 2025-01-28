@@ -1,6 +1,6 @@
 import pandas as pd
 import streamlit as st
-from dataset import full_exceptVolume, complete_stock_data
+from dataset import full_exceptVolume, complete_stock_data, get_stock_data
 import plotly.express as px
 import plotly.graph_objects as go
 st.set_page_config(page_title="Single Equity analysis", page_icon=":bar_chart:", layout="wide")
@@ -77,6 +77,7 @@ end_date=st.sidebar.date_input(':watch: End Date:')
 if stock_input and start_date and selected_option:
  st.write(stock_input)
  full_data= full_exceptVolume(stock_input,start_date,end_date)
+
  
  full_data_flat = full_data.copy()
  if isinstance(full_data.columns, pd.MultiIndex):
@@ -84,6 +85,8 @@ if stock_input and start_date and selected_option:
 
 
  complete_data = complete_stock_data(stock_input,start_date,end_date)
+ st.write(complete_data)
+ #Adj_close_data = get_stock_data(stock_input,start_date,end_date)
  volume_data = complete_data['Volume']
                                                     # datbase view ahe
 with col1:  # Line Chart
@@ -160,9 +163,11 @@ with TL:
   st.plotly_chart(fig)
                                                                   #gauge chart
  
-#  with M:
-#   if not full_data.empty:
-#     returns = full_data['Adj Close'].pct_change().dropna()
+with M:
+
+  st.write(complete_data.columns)
+#   if not Adj_close_data.empty:
+#     returns = Adj_close_data.values.pct_change().dropna()
 #   else:
 #     st.warning("No data available for percentage change calculation")
 #     returns = pd.Series()
@@ -182,30 +187,30 @@ with TL:
 #   # Display the gauge chart in Streamlit
 #   st.plotly_chart(fig)
 
-#  with TMR:                                #  indicator
-#   fig = go.Figure()
-#   maximum = full_data['High'].max()
-#   minimum= full_data['Low'].min()
-#   fig.add_trace(go.Indicator(
-#    mode="number+delta",
-#    value=maximum,
-#    title={
-#     "text": stock_input+ ":<br><span style='font-size:0.8em;color:gray'>MAX returns</span><br><span style='font-size:0.8em;color:gray'>High-Low</span>"},
-#    delta={'reference': minimum, 'relative': True},
-#    domain={'x': [0, 1], 'y': [0, 1]}))
-#   fig.update_layout(height=270,width=300,
-#   paper_bgcolor = 'rgba(0, 0, 0, 0)',  # Transparent background
-#   plot_bgcolor = 'rgba(0, 0, 0, 0)',
-#   )
-#   st.write(fig, align='center')
+with TMR:                                #  indicator
+  fig = go.Figure()
+  maximum = full_data['High'].values.max()
+  minimum= full_data['Low'].values.min()
+  fig.add_trace(go.Indicator(
+   mode="number+delta",
+   value=maximum,
+   title={
+    "text": stock_input+ ":<br><span style='font-size:0.8em;color:gray'>MAX returns</span><br><span style='font-size:0.8em;color:gray'>High-Low</span>"},
+   delta={'reference': minimum, 'relative': True},
+   domain={'x': [0, 1], 'y': [0, 1]}))
+  fig.update_layout(height=270,width=300,
+  paper_bgcolor = 'rgba(0, 0, 0, 0)',  # Transparent background
+  plot_bgcolor = 'rgba(0, 0, 0, 0)',
+  )
+  st.write(fig, align='center')
 
-#  with TR:
-#   volume_data = complete_data['Volume']
-#   line = px.line(volume_data, title='Stock volume Visualizer')  # line wala
-#   line.update_layout(
-#    paper_bgcolor='rgba(0, 0, 0, 0)',  # Transparent background
-#    plot_bgcolor='rgba(0, 0, 0, 0)',  # Transparent plot area
-#   )
-#   line.update_layout(width=300, height=270)
-#   st.plotly_chart(line)
+with TR:
+  volume_data = complete_data['Volume']
+  line = px.line(volume_data, title='Stock volume Visualizer')  # line wala
+  line.update_layout(
+   paper_bgcolor='rgba(0, 0, 0, 0)',  # Transparent background
+   plot_bgcolor='rgba(0, 0, 0, 0)',  # Transparent plot area
+  )
+  line.update_layout(width=300, height=270)
+  st.plotly_chart(line)
 
