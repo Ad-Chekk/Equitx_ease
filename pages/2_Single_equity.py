@@ -95,8 +95,10 @@ if stock_input and start_date and selected_option:
   # paper_bgcolor='rgba(0, 0, 0, 0)',  # Transparent background
   # plot_bgcolor='rgba(0, 0, 0, 0)',  # Transparent plot area
   # )
-  line.update_layout( height=350, width=800)
-  st.plotly_chart(line)
+  line.update_layout(height=350)
+  st.plotly_chart(line, use_container_width=True)
+  # line.update_layout( height=350, width=800)
+  # st.plotly_chart(line)
 
 
 
