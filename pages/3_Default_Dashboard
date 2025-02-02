@@ -60,6 +60,15 @@ if width=="Dash-View":
 elif width=="Full-View":
  width1=full_width
 
+
+if 'stock_input' not in st.session_state:
+    st.session_state.stock_input = None
+if 'start_date' not in st.session_state:
+    st.session_state.start_date = None
+if 'selected_option' not in st.session_state:
+    st.session_state.selected_option = None
+
+
 selected_option = st.sidebar.selectbox("Select Stock Type:", ["Indian Stocks", "International stocks"])
 stock_input= st.sidebar.text_input('Enter stock Name')
 if (selected_option=="Indian Stocks"):
@@ -74,8 +83,7 @@ start_date=st.sidebar.date_input(":spiral_calendar_pad: Start Date:")
 end_date=st.sidebar.date_input(':watch: End Date:')
 
 
-if stock_input and start_date and selected_option:
-  
+def display_charts(stock_input, start_date , selected_option):  
   st.write(stock_input)
   full_data= full_exceptVolume(stock_input,start_date,end_date)
 
@@ -214,4 +222,20 @@ if stock_input and start_date and selected_option:
     )
     line.update_layout(width=300, height=270)
     st.plotly_chart(line)
+
+
+
+if (st.session_state.stock_input is None or 
+    st.session_state.start_date is None or 
+    st.session_state.selected_option is None):
+    display_charts("amzn", "2024-09-02", "International stocks")  # Default to Amazon
+else:
+    display_charts(st.session_state.stock_input, st.session_state.start_date, st.session_state.selected_option)
+
+# if stock_input==None and start_date==None and selected_option==None:
+#    display_charts("amzn", "2024-09-02" , "International stocks") 
+#    #display_charts(stock_input, start_date, selected_option)
+# else:
+#    display_charts(stock_input, start_date, selected_option)   
+  
 
