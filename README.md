@@ -1,67 +1,113 @@
-# 🎓 Course Recommendation System
+📊 Stock Market Insights Dashboard
+An interactive multi-page Streamlit web application for analyzing stock market data, visualizing trends, extracting financial news, and comparing equities across Indian and international exchanges.
 
- Overview
-The **Course Recommendation System** is a **machine learning-powered web app** built with **Streamlit** that suggests courses based on similarity of course embeddings. It leverages **BERT-based embeddings** and **cosine similarity** to find the best matching courses.
+🧠 Project Overview
+This project offers a visual dashboard to:
 
-## 🛠 Features
-- 🔍 **Course Selection**: Choose a course from the dropdown, and get top 5 recommended courses based on similarity.
-- 📌 **Recommendation Cards**: Displayed in **aesthetic semi-transparent cards** with course details.
-- 🏫 **University & Ratings**: Each recommendation includes university name and course rating.
-- 🌐 **Course Search**: Search for courses by name.
-- 💾 **Processed Data Export**: Save the processed courses as a CSV file.
+Analyze stock trends for Indian and international markets.
 
-## 📸 Screenshots
-![image](https://github.com/user-attachments/assets/6c90530a-6b1a-4227-8d6f-0bbf3ce56499)
+View real-time stock news and sentiment.
 
-## 🔧 Installation & Usage
-### 1️⃣ Clone the Repository
-```bash
-git clone https://github.com/yourusername/course-recommendation.git
-cd course-recommendation
-```
-### 2️⃣ Install Dependencies
-```bash
+Visualize key indicators like price change, trading volume, and volatility.
+
+Customize the dashboard layout and interact with multiple pages.
+
+Built using Streamlit, Plotly, and yfinance, this app allows both technical and non-technical users to gain actionable insights into equity performance.
+
+🚀 Features
+📈 Single Stock Analysis: Track stock prices, volume, and indicators.
+
+📰 News Sentiment: Scrape and visualize the latest headlines for selected stocks.
+
+🌐 Exchange Support: Supports NSE/BSE for Indian stocks and Nasdaq/NYSE for international.
+
+📊 Dashboards:
+
+Line and volume charts
+
+Donut charts for price-volume relationship
+
+Gauge charts for average volume
+
+Max-Min indicator comparisons
+
+📦 Modular Design: Organized using separate scripts for different functionalities.
+
+🏗️ Project Structure
+bash
+Copy
+Edit
+.
+├── app.py                  # Main entry point (Streamlit app)
+├── 1_stock_news.py         # News extraction and display
+├── 2_Single_equity.py      # Single stock analysis logic
+├── 3_Default_Dashboard.py  # Default landing dashboard
+├── dataset.py              # Data fetching and preprocessing
+├── variables.py            # Shared constants and variables
+├── requirements.txt        # Python dependencies
+├── devcontainer.json       # Development environment settings
+🛠️ Installation
+Clone the repository:
+
+bash
+Copy
+Edit
+git clone https://github.com/your-username/stock-dashboard.git
+cd stock-dashboard
+Create a virtual environment:
+
+bash
+Copy
+Edit
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+Install dependencies:
+
+bash
+Copy
+Edit
 pip install -r requirements.txt
-```
-### 3️⃣ Run the Application
-```bash
+💻 Usage
+Launch the application using:
+
+bash
+Copy
+Edit
 streamlit run app.py
-```
+The app will open in your browser at http://localhost:8501.
 
-## 📂 Project Structure
-```
-📁 course-recommendation/
-├── 📄 app.py            # Streamlit UI & Recommendation Logic
-├── 📄 course_embeddings.pkl # Precomputed Course Embeddings
-├── 📄 processed_embeddings.csv # Expanded Embeddings Data
-├── 📄 processed_courses.csv # Processed Course Data
-├── 📄 requirements.txt  # Dependencies
-└── 📄 README.md         # Project Documentation
-```
+Use the sidebar to:
 
-## 🧠 How It Works
-1. **Loads Precomputed Embeddings**: Reads `course_embeddings.pkl` (created using BERT model).
-2. **Processes Embeddings**: Converts tensors to lists and expands them into individual dimensions.
-3. **Computes Similarity**: Uses **cosine similarity** to find the closest matching courses.
-4. **Displays Recommendations**: Top 5 courses are shown in beautifully styled **semi-transparent cards**.
+Select stock type (Indian or International)
 
-## 🤖 Technologies Used
-- **Python** 🐍
-- **Streamlit** 🎨 (For UI)
-- **Torch (PyTorch)** 🔥 (For Tensor Handling)
-- **scikit-learn** 🧠 (For Similarity Computation)
-- **pandas** 🏗 (For Data Processing)
+Choose NSE or BSE for Indian stocks
 
-## 📌 Future Enhancements
-- ✨ **User-based personalization** (Store user preferences for better recommendations)
-- 🔥 **More advanced NLP models** (Try sentence transformers for better embeddings)
-- 🌍 **Deploy on a cloud platform** (Streamlit Cloud / AWS / Heroku)
+Input the stock symbol (e.g., TCS, AAPL)
 
-## 💡 Contributing
-Contributions are welcome! Feel free to **fork** the repo and submit a **pull request**.
+Set start and end dates for analysis
 
-## 📜 License
-This project is licensed under the MIT License.
+🔍 Example Screenshots
+(Include relevant screenshots of different pages of the dashboard.)
 
+🧩 Technologies Used
+Streamlit – Frontend UI
 
+Plotly – Interactive charts
+
+Pandas – Data manipulation
+
+yfinance – Financial data retrieval
+
+BeautifulSoup – News scraping
+
+[Python datetime & numpy] – Data utilities
+
+📌 Future Enhancements
+Add machine learning predictions for stock trends.
+
+Integrate real-time trading signals.
+
+Deploy on cloud platforms (e.g., Streamlit Cloud, Heroku, or AWS).
+
+Add user authentication for personalized dashboards.
 
