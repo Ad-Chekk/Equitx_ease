@@ -52,8 +52,8 @@ Clone the repository:
 bash
 Copy
 Edit
-git clone https://github.com/your-username/stock-dashboard.git
-cd stock-dashboard
+git clone https://github.com/Ad-Chekk/Equitx_ease
+
 Create a virtual environment:
 
 bash
